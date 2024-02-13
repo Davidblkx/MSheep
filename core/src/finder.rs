@@ -28,6 +28,7 @@ impl MusicFileFinder {
     }
 
     pub fn list(&self) -> Result<MusicDirResult> {
+        log::trace!("Listing music files in directory: {:?}", self.root);
         let read_dir = self.root.read_dir()?;
         Ok(MusicDirResult::new(read_dir, self.extensions.clone(), self.recursive))
     }
@@ -103,10 +104,12 @@ impl Iterator for MusicDirResult {
                                 let path = entry.path();
                                 if let Some(ext) = path.extension() {
                                     if self.extensions.contains(&ext.to_string_lossy().to_string()) {
+                                        log::trace!("Found music file: {:?}", path);
                                         return Some(Ok(MusicFile::new(path)));
                                     }
                                 }
                             }
+                            log::trace!("Skipping non-music entry: {:?}", entry.path());
                         }
                     }
                 },

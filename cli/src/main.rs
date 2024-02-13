@@ -1,14 +1,18 @@
 use std::path::PathBuf;
 
-use msheep_core::finder::MusicFileFinder;
+use msheep_core::tasker::{TaskHandler, TaskOptions, TaskType};
 
 fn main() {
     let path = PathBuf::from("E:\\music");
-    let finder = MusicFileFinder::new(path).with_recursive(true);
-    let list = finder.list().unwrap();
-    for file in list {
-        let mut file = file.unwrap();
-        file.load_data().unwrap();
-        println!("{:?}", file.path);
-    }
+
+    let mut handler = TaskHandler::new();
+    handler.add_task(TaskType::Move);
+
+    let options = TaskOptions {
+        root: path,
+        recursive: true,
+        dry_run: false,
+    };
+
+    msheep_core::tasker::run_tasks(&handler, options).unwrap();
 }

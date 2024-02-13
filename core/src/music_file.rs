@@ -23,6 +23,7 @@ impl MusicFile {
     }
 
     pub fn read_data(&self) -> Result<MusicData> {
+        log::trace!("Reading data from file: {:?}", self.path);
         let tag = Tag::new().read_from_path(&self.path)?;
         Ok(MusicData::from_audiotag(tag))
     }

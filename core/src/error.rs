@@ -10,4 +10,6 @@ pub enum MSheepError {
     IOError(#[from] std::io::Error),
     #[error("Metadata lib error: {0}")]
     AudioTagError(#[from] audiotags::Error),
+    #[error("Task error: {0}")]
+    TaskError(String),
 }
