@@ -7,3 +7,6 @@ edition.workspace = true
 
 [dependencies]
 msheep_core = { path = "../core" }
+simple_logger = "4.3"
+bakunin_config = "0.1.1"
+log = "0.4"

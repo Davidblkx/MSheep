@@ -12,4 +12,6 @@ pub enum MSheepError {
     AudioTagError(#[from] audiotags::Error),
     #[error("Task error: {0}")]
     TaskError(String),
+    #[error("Config error: {0}")]
+    ConfigError(#[from] bakunin_config::errors::ConfigError),
 }

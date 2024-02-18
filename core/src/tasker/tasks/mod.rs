@@ -1,30 +1,35 @@
-mod task_move;
+mod task_read_metadata;
+mod task_organize;
 
 use crate::tasker::Task;
 
-use task_move::TaskMove;
+use task_organize::TaskOrganize;
 
 pub enum TaskType {
-    Move,
+    ReadMetadata,
+    Organize,
 }
 
 impl TaskType {
     pub fn from_str(name: &str) -> Option<TaskType> {
         match name {
-            "move" => Some(TaskType::Move),
+            "read_metadata" => Some(TaskType::ReadMetadata),
+            "organize" => Some(TaskType::Organize),
             _ => None,
         }
     }
 
     pub fn to_str(&self) -> &str {
         match self {
-            TaskType::Move => "move",
+            TaskType::ReadMetadata => "read_metadata",
+            TaskType::Organize => "organize",
         }
     }
 
     pub fn to_task(&self) -> Box<dyn Task> {
         match self {
-            TaskType::Move => Box::new(TaskMove {}),
+            TaskType::ReadMetadata => Box::new(task_read_metadata::TaskReadMetadata {}),
+            TaskType::Organize => Box::new(TaskOrganize::new()),
         }
     }
 }

@@ -30,15 +30,15 @@ impl MusicData {
         Self {
             title: tag.title().map(|e| e.to_string()),
             artist: artists.first().map(|e| e.to_string()),
+            album_artist: album_artists.first().or(artists.first()).map(|e| e.to_string()),
             artists,
             album: tag.album_title().map(|e| e.to_string()),
-            album_artist: album_artists.first().map(|e| e.to_string()),
             album_artists,
             track_number: tag.track_number().map(|e| e as u32),
             total_tracks: tag.total_tracks().map(|e| e as u32),
             disc_number: tag.disc_number().map(|e| e as u32),
             total_discs: tag.total_discs().map(|e| e as u32),
-            year: tag.year().map(|e| e as u32),
+            year: read_year(&*tag),
             composer: tag.composer().map(|e| e.to_string()),
             genre: tag.genre().map(|e| e.to_string()),
         }
@@ -80,5 +80,15 @@ impl Display for MusicData {
             self.total_discs.map(|e| e.to_string()).unwrap_or("".to_string()),
             self.year.map(|e| e.to_string()).unwrap_or("".to_string())
         )
+    }
+}
+
+fn read_year(tag: &dyn AudioTag) -> Option<u32> {
+    match tag.year() {
+        Some(year) => Some(year as u32),
+        None => match tag.date() {
+            Some(date) => Some(date.year as u32),
+            None => None,
+        },
     }
 }
