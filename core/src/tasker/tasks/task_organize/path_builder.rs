@@ -56,13 +56,29 @@ fn replace_template(path: &str, key: &str, value: Option<String>) -> Result<Stri
 
 // replace invalid path characters by empty string
 fn clean_value(value: &str) -> String {
-    return value.replace("/", "")
-        .replace("\\", "")
-        .replace(":", "")
-        .replace("?", "")
-        .replace("*", "")
-        .replace("\"", "")
-        .replace("<", "")
-        .replace(">", "")
-        .replace("|", "");
+    value.replace(&['\\', ':', '?', '*', '\'', '<', '>', '|', '/', '\0'][..], "")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_clean_value() {
+        let value = "AC/DC";
+        assert_eq!(clean_value(value), "ACDC");
+        _ = PathBuf::from(clean_value(value));
+
+        let value = "AC\\DC";
+        assert_eq!(clean_value(value), "ACDC");
+        _ = PathBuf::from(clean_value(value));
+
+        let value = "AC\0DC";
+        assert_eq!(clean_value(value), "ACDC");
+        _ = PathBuf::from(clean_value(value));
+
+        let value = "Back in Black: 2003";
+        assert_eq!(clean_value(value), "Back in Black 2003");
+        _ = PathBuf::from(clean_value(value));
+    }
 }

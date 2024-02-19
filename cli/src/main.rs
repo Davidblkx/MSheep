@@ -6,7 +6,7 @@ use msheep_core::tasker::{TaskHandler, TaskOptions, TaskType};
 fn main() {
     simple_logger::init_with_env().unwrap();
 
-    let path = PathBuf::from("E:\\music\\Miles Davis;john Coltrane;Bill Evans;Wynton Kelly;Paul Chambers;Jimmy Cobb");
+    let path = PathBuf::from("E:\\music");
 
     let mut handler = TaskHandler::new();
     handler.add_task(TaskType::ReadMetadata);

@@ -59,6 +59,11 @@ impl TaskOrganize {
             }
         };
 
+        if file.path == dest_path {
+            log::trace!("[SKIP] File is organized: {:?}", file.path);
+            return self.r_task_skip(TaskStep::RunForFile);
+        }
+
         let word = if config.r#move { "Moved" } else { "Copied" };
 
         if context.options.dry_run {
