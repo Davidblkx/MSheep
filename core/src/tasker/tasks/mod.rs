@@ -1,13 +1,16 @@
 mod task_read_metadata;
 mod task_organize;
+mod task_cleanup;
 
 use crate::tasker::Task;
 
 use task_organize::TaskOrganize;
+use task_cleanup::TaskCleanup;
 
 pub enum TaskType {
     ReadMetadata,
     Organize,
+    Cleanup,
 }
 
 impl TaskType {
@@ -15,6 +18,7 @@ impl TaskType {
         match name {
             "read_metadata" => Some(TaskType::ReadMetadata),
             "organize" => Some(TaskType::Organize),
+            "cleanup" => Some(TaskType::Cleanup),
             _ => None,
         }
     }
@@ -23,6 +27,7 @@ impl TaskType {
         match self {
             TaskType::ReadMetadata => "read_metadata",
             TaskType::Organize => "organize",
+            TaskType::Cleanup => "cleanup",
         }
     }
 
@@ -30,6 +35,7 @@ impl TaskType {
         match self {
             TaskType::ReadMetadata => Box::new(task_read_metadata::TaskReadMetadata {}),
             TaskType::Organize => Box::new(TaskOrganize::new()),
+            TaskType::Cleanup => Box::new(TaskCleanup::new()),
         }
     }
 }
