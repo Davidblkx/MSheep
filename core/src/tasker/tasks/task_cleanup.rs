@@ -87,8 +87,8 @@ impl TaskCleanup {
             }
             
             if entry.file_type()?.is_dir() {
-                is_empty = self.remove_dir(&entry.path(), dry_run)?;
-                if is_empty {
+                let is_child_empty = self.remove_dir(&entry.path(), dry_run)?;
+                if is_child_empty {
                     if !dry_run {
                         log::info!("[cleanup] Removing empty directory: {:?}", entry.path());
                         std::fs::remove_dir(&entry.path())?;
@@ -96,7 +96,7 @@ impl TaskCleanup {
                         log::info!("!DRY_RUN[cleanup] Removing empty directory: {:?}", entry.path());
                     }
                 } else {
-                    break;
+                    is_empty = false;
                 }
             }
         }

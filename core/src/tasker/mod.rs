@@ -50,12 +50,16 @@ pub fn run_tasks(handler: &TaskHandler, options: TaskOptions, config: bakunin_co
 
     log::debug!("Running tasks for music files");
     for file in file_list {
-        context.current = Some(file?);
+        let music_file = file?;
+        context.current = Some(music_file);
         for task in &mut tasks {
             log::trace!("Running task: {}", task.name());
             let res = task.run(TaskStep::RunForFile, &mut context)?;
             if !res.is_success() {
-                log::warn!("[{}] Task failed to run: {}", res.task, res.message.unwrap_or("Unknown error".to_string()));
+                match context.current {
+                    Some(ref file) => log::warn!("[{}] {:?}: {}", res.task, file.path, res.message.unwrap_or("Unknown error".to_string())),
+                    None => log::warn!("[{}] Unknown file: {}", res.task, res.message.unwrap_or("Unknown error".to_string())),
+                }
             }
         }
     }

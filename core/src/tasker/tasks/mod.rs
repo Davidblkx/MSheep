@@ -4,6 +4,7 @@ mod task_cleanup;
 
 use crate::tasker::Task;
 
+use task_read_metadata::TaskReadMetadata;
 use task_organize::TaskOrganize;
 use task_cleanup::TaskCleanup;
 
@@ -33,7 +34,7 @@ impl TaskType {
 
     pub fn to_task(&self) -> Box<dyn Task> {
         match self {
-            TaskType::ReadMetadata => Box::new(task_read_metadata::TaskReadMetadata {}),
+            TaskType::ReadMetadata => Box::new(TaskReadMetadata {}),
             TaskType::Organize => Box::new(TaskOrganize::new()),
             TaskType::Cleanup => Box::new(TaskCleanup::new()),
         }
