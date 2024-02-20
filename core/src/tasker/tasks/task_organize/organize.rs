@@ -27,7 +27,6 @@ pub fn organize_file(cfg: &OrganizeConfig, from: &PathBuf, to: &PathBuf) -> Resu
     Ok(())
 }
 
-
 fn create_folders(path: &PathBuf) -> Result<()> {
     match path.parent() {
         Some(parent) => std::fs::create_dir_all(parent)?,

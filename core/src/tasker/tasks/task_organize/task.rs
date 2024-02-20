@@ -53,7 +53,7 @@ impl TaskOrganize {
         let dest_path = match super::path_builder::build_path(config.path.as_str(), data, file.path.extension()) {
             Ok(p) => p,
             Err(e) => {
-                let message = format!("Failed to build destination path: {}", e);
+                let message = format!("Failed to build destination path[{:?}]: {}", &file.path, e);
                 log::error!("{}", message);
                 return self.r_task_fail_m(TaskStep::RunForFile, &message)
             }

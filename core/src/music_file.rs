@@ -11,6 +11,16 @@ pub struct MusicFile {
 
 impl MusicFile {
     pub fn new(path: PathBuf) -> Self {
+
+        // On Windows, the file system is case insensitive, so we need to lowercase the path to avoid issues
+        if std::env::consts::OS == "windows" {
+            let path = path.to_string_lossy().to_lowercase();
+            return Self {
+                path: path.into(),
+                data: None,
+            }
+        }
+
         Self {
             path,
             data: None,
